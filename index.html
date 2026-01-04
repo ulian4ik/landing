@@ -185,6 +185,93 @@
             object-fit: cover;
         }
 
+        /* Анимации */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .animate-on-scroll.animated {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .hero-text h1 {
+            animation: fadeIn 1s ease-out;
+        }
+
+        .hero-text p {
+            animation: fadeIn 1s ease-out 0.3s both;
+        }
+
+        .hero .btn {
+            animation: fadeIn 1s ease-out 0.6s both;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.5);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #f0f3f6, #fff);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-primary:hover {
+            animation: pulse 0.6s ease;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .cta-form input:focus {
+            border-color: var(--color-accent);
+            box-shadow: 0 0 10px rgba(92, 133, 214, 0.3);
+        }
+
+        .trust-badges {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .trust-badges .badge {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .trust-badges .badge svg {
+            width: 20px;
+            height: 20px;
+            color: var(--color-accent);
+        }
+
 
         /* ------------------- */
         /*   2. БЛОК "БОЛИ"    */
@@ -495,7 +582,7 @@
     <main>
 
         <!-- 2. БЛОК "БОЛИ" КЛИЕНТА -->
-        <section id="problems">
+        <section id="problems" class="animate-on-scroll">
             <div class="container">
                 <h2 class="section-title">Узнаете свою ситуацию?</h2>
                 <div class="problems-grid">
@@ -525,7 +612,7 @@
         </section>
 
         <!-- 3. БЛОК УСЛУГ "РЕШЕНИЕ" -->
-        <section id="services">
+        <section id="services" class="animate-on-scroll">
             <div class="container">
                 <h2 class="section-title">Подберем формат обучения, который подойдет именно вам</h2>
                 <div class="services-grid">
@@ -555,7 +642,7 @@
         </section>
 
         <!-- 4. БЛОК ЭКСПЕРТНОСТИ -->
-        <section id="expert">
+        <section id="expert" class="animate-on-scroll">
             <div class="container">
                 <div class="expert-block">
                     <div class="expert-photo">
@@ -573,7 +660,7 @@
         </section>
 
         <!-- 5. БЛОК ОТЗЫВОВ -->
-        <section id="reviews">
+        <section id="reviews" class="animate-on-scroll">
             <div class="container">
                 <h2 class="section-title">Они уже решили свои проблемы. Получится и у вас!</h2>
                 <div class="reviews-grid">
@@ -602,10 +689,20 @@
         </section>
 
         <!-- 6. ФИНАЛЬНЫЙ БЛОК С ФОРМОЙ -->
-        <section id="form-section">
+        <section id="form-section" class="animate-on-scroll">
             <div class="container">
                 <h2 class="section-title">Сделайте первый шаг к собаке вашей мечты уже сегодня!</h2>
-                <p class="form-subtitle">Оставьте заявку на бесплатную 15-минутную онлайн-консультацию. Мы разберем вашу ситуацию и подскажем, с чего начать.</p>
+                <p class="form-subtitle">Ограниченное количество мест на консультацию — запишитесь сейчас! Оставьте заявку на бесплатную 15-минутную онлайн-консультацию. Мы разберем вашу ситуацию и подскажем, с чего начать.</p>
+                <div class="trust-badges">
+                    <div class="badge">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.623 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" /></svg>
+                        <span>Безопасная оплата</span>
+                    </div>
+                    <div class="badge">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        <span>Гарантия результата</span>
+                    </div>
+                </div>
                 <form class="cta-form" action="#" method="POST">
                     <input type="text" name="name" placeholder="Ваше имя" required>
                     <input type="tel" name="phone" placeholder="Ваш телефон" required>
@@ -654,6 +751,57 @@
         </div>
     </footer>
 </div>
+
+<script>
+    // Scroll-triggered animations
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animated');
+            }
+        });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.animate-on-scroll').forEach(el => {
+        observer.observe(el);
+    });
+
+    // Form validation and feedback
+    const form = document.querySelector('.cta-form');
+    const inputs = form.querySelectorAll('input');
+
+    inputs.forEach(input => {
+        input.addEventListener('blur', function() {
+            if (this.checkValidity()) {
+                this.style.borderColor = 'var(--color-accent)';
+            } else {
+                this.style.borderColor = '#ff6b6b';
+            }
+        });
+    });
+
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        // Simple form handling - in real app, send to server
+        const button = form.querySelector('button');
+        const originalText = button.textContent;
+
+        button.textContent = 'Отправка...';
+        button.disabled = true;
+
+        setTimeout(() => {
+            button.textContent = 'Заявка отправлена!';
+            button.style.background = '#4CAF50';
+
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.disabled = false;
+                button.style.background = '';
+            }, 2000);
+        }, 1000);
+    });
+</script>
     
 </body>
 </html>
