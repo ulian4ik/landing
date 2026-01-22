@@ -1,879 +1,349 @@
 <!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dogtrening - Первый шаг к пониманию вашей собаки</title>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&display=swap" rel="stylesheet">
-
-    <style>
-        /* ------------------- */
-        /*   Переменные и общие стили   */
-        /* ------------------- */
-        :root {
-            --bg-color: #121413;
-            --card-bg: rgba(255, 255, 255, 0.05);
-            --card-border: rgba(255, 255, 255, 0.1);
-            --card-hover-bg: rgba(255, 255, 255, 0.1);
-            --text-primary: #f0f3f6;
-            --text-secondary: #9ea4ac;
-            --color-accent: #5c85d6; /* Адаптированный синий для лучшего контраста */
-            --color-accent-hover: #7b9fe0;
-            --font-main: 'Manrope', sans-serif;
-            --border-radius-lg: 16px;
-            --border-radius-md: 12px;
-            --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+<html class="dark" lang="ru"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Dogtrening — Премиальная школа дрессировки собак</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0df259",
+                        "background-light": "#f5f8f6",
+                        "background-dark": "#121413",
+                        "accent-blue": "#5c85d6",
+                        "card-dark": "rgba(24, 52, 34, 0.4)",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                },
+            },
         }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
+    </script>
+<style>
         body {
-            font-family: var(--font-main);
-            color: var(--text-primary);
-            background-color: var(--bg-color);
-            line-height: 1.7;
-            font-size: 16px;
-            overflow-x: hidden;
+            font-family: 'Plus Jakarta Sans', sans-serif;
         }
-        
-        .site-wrapper {
-            position: relative;
-            z-index: 1;
-        }
-
-        /* АНИМАЦИИ */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes fadeInLeft {
-            from {
-                opacity: 0;
-                transform: translateX(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        @keyframes fadeInRight {
-            from {
-                opacity: 0;
-                transform: translateX(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        @keyframes pulse {
-            0%, 100% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.05);
-            }
-        }
-
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {
-                transform: translateY(0);
-            }
-            40% {
-                transform: translateY(-10px);
-            }
-            60% {
-                transform: translateY(-5px);
-            }
-        }
-
-        .animate-on-scroll {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s ease;
-        }
-
-        .animate-on-scroll.animate {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .animate-left {
-            opacity: 0;
-            transform: translateX(-30px);
-            transition: all 0.8s ease;
-        }
-
-        .animate-left.animate {
-            opacity: 1;
-            transform: translateX(0);
-        }
-
-        .animate-right {
-            opacity: 0;
-            transform: translateX(30px);
-            transition: all 0.8s ease;
-        }
-
-        .animate-right.animate {
-            opacity: 1;
-            transform: translateX(0);
-        }
-
-        .btn-pulse:hover {
-            animation: pulse 0.6s ease-in-out;
-        }
-
-        .btn-bounce:hover {
-            animation: bounce 0.6s ease-in-out;
-        }
-
-        /* Progress bar */
-        .progress-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background-color: rgba(255, 255, 255, 0.1);
-            z-index: 1000;
-        }
-
-        .progress-bar {
-            height: 100%;
-            background: linear-gradient(90deg, var(--color-accent), #7b9fe0);
-            width: 0%;
-            transition: width 0.3s ease;
-        }
-        
-        /* Эффект размытого фона */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url('https://images.unsplash.com/photo-1599211943568-333425f77831?q=80&w=1887&auto=format&fit=crop');
-            background-size: cover;
-            background-position: center;
-            filter: blur(10px) brightness(0.4);
-            z-index: -1;
-        }
-
-        .container {
-            max-width: 1240px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        section {
-            padding: 60px 0;
-        }
-
-        h1, h2, h3, h4 {
-            font-weight: 800;
-            line-height: 1.2;
-        }
-
-        h2.section-title {
-            font-size: 2.8rem;
-            text-align: center;
-            margin-bottom: 40px;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        
-        /* Общий стиль для "стеклянных" карточек */
         .glass-card {
-            background: var(--card-bg);
+            background: rgba(255, 255, 255, 0.03);
             backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid var(--card-border);
-            border-radius: var(--border-radius-lg);
-            padding: 30px;
-            transition: background 0.3s ease, transform 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
-        
-        .glass-card:hover {
-            background: var(--card-hover-bg);
-            transform: translateY(-5px);
+        .glass-header {
+            background: rgba(18, 20, 19, 0.8);
+            backdrop-filter: blur(20px);
         }
-
-        .btn {
-            display: inline-block;
-            padding: 14px 32px;
-            font-family: var(--font-main);
-            font-weight: 700;
-            font-size: 1rem;
-            text-decoration: none;
-            border-radius: var(--border-radius-md);
-            transition: all 0.3s ease;
-            border: none;
-            cursor: pointer;
-            text-align: center;
-        }
-        
-        .btn-primary {
-            background-color: var(--text-primary);
-            color: var(--bg-color);
-        }
-
-        .btn-primary:hover {
-            background-color: #fff;
-            transform: translateY(-3px);
-        }
-        
-        .btn-secondary {
-            background-color: transparent;
-            color: var(--text-primary);
-            border: 1px solid var(--text-primary);
-        }
-        
-        .btn-secondary:hover {
-            background-color: var(--text-primary);
-            color: var(--bg-color);
-        }
-        
-        /* ------------------- */
-        /*   1. HERO SECTION   */
-        /* ------------------- */
-        .hero {
-            min-height: 90vh;
-            display: flex;
-            align-items: center;
-            padding: 120px 0 80px 0;
-        }
-        
-        .hero .container {
-            display: grid;
-            grid-template-columns: 1fr;
-            align-items: center;
-            gap: 40px;
-        }
-
-        .hero-text h1 {
-            font-size: 3.5rem;
-            margin-bottom: 20px;
-            letter-spacing: -1px;
-        }
-
-        .hero-text p {
-            font-size: 1.1rem;
-            color: var(--text-secondary);
-            margin-bottom: 30px;
-            max-width: 500px;
-        }
-
-        .urgency-banner {
-            background: linear-gradient(135deg, var(--color-accent), #7b9fe0);
-            color: white;
-            padding: 12px 20px;
-            border-radius: var(--border-radius-md);
-            margin-bottom: 30px;
-            font-weight: 700;
-            font-size: 0.95rem;
-            box-shadow: 0 4px 15px rgba(92, 133, 214, 0.3);
-            animation: pulse 2s infinite;
-        }
-
-        .urgency-banner::before {
-            content: '⏰';
-            margin-right: 8px;
-        }
-        
-        .hero-image-card {
-            padding: 0;
-            overflow: hidden;
-            height: 100%;
-            min-height: 400px;
-        }
-        
-        .hero-image-card img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-
-        /* ------------------- */
-        /*   2. БЛОК "БОЛИ"    */
-        /* ------------------- */
-        .problems-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 25px;
-        }
-
-        .problem-card {
-            text-align: center;
-        }
-
-        .problem-card .icon {
-            color: var(--color-accent);
-            width: 48px;
-            height: 48px;
-            margin-bottom: 20px;
-        }
-        .problem-card p {
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-        }
-
-        .problems-conclusion {
-            text-align: center;
-            margin-top: 50px;
-            font-size: 1.2rem;
-            font-weight: 700;
-        }
-        
-        /* ------------------- */
-        /*   3. БЛОК "РЕШЕНИЕ" (УСЛУГИ) */
-        /* ------------------- */
-        #services {
-            padding-bottom: 100px;
-        }
-        .services-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 30px;
-        }
-
-        .service-card {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .service-card .icon {
-            color: var(--color-accent);
-            width: 48px;
-            height: 48px;
-            margin-bottom: 20px;
-        }
-        
-        .service-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-        }
-
-        .service-card .description {
-            margin-bottom: 20px;
-            color: var(--text-secondary);
-            flex-grow: 1;
-        }
-
-        .service-card .who-fits {
-            font-size: 0.9rem;
-            background-color: rgba(0,0,0,0.2);
-            padding: 10px 15px;
-            border-radius: 8px;
-            margin-bottom: 25px;
-            color: var(--text-secondary);
-            border-left: 3px solid var(--color-accent);
-        }
-        
-        /* ------------------- */
-        /*   4. БЛОК ЭКСПЕРТА  */
-        /* ------------------- */
-        .expert-block {
-            display: grid;
-            grid-template-columns: 1fr;
-            align-items: center;
-            gap: 40px;
-        }
-
-        .expert-photo img {
-            width: 100%;
-            border-radius: var(--border-radius-lg);
-            object-fit: cover;
-        }
-
-        .expert-text blockquote {
-            font-size: 1.2rem;
-            font-weight: 400;
-            line-height: 1.6;
-            margin-bottom: 25px;
-            padding-left: 20px;
-            border-left: 3px solid var(--color-accent);
-        }
-
-        .expert-signature {
-            font-weight: 700;
-            color: var(--text-primary);
-        }
-        
-        /* ------------------- */
-        /*   5. БЛОК ОТЗЫВОВ   */
-        /* ------------------- */
-        .reviews-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 30px;
-        }
-
-        .review-card blockquote {
-            position: relative;
-            margin-bottom: 20px;
-            color: var(--text-secondary);
-            font-size: 1.1rem;
-        }
-
-        .review-card blockquote::before {
-            content: '“';
-            font-size: 8rem;
-            color: var(--color-accent);
-            opacity: 0.1;
-            position: absolute;
-            left: -10px;
-            top: -50px;
-            line-height: 1;
-        }
-        
-        .review-author {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-top: 30px;
-        }
-
-        .review-author img {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .review-author-info strong {
-            font-weight: 700;
-        }
-        .review-author-info span {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        /* ------------------- */
-        /*   6. ФОРМА ЗАЯВКИ   */
-        /* ------------------- */
-        #form-section .container {
-            text-align: center;
-        }
-
-        .form-subtitle {
-            max-width: 600px;
-            margin: 0 auto 40px;
-            font-size: 1.1rem;
-            color: var(--text-secondary);
-        }
-        
-        .cta-form {
-            max-width: 500px;
-            margin: 0 auto;
-            display: grid;
-            gap: 20px;
-        }
-
-        .cta-form input {
-            width: 100%;
-            padding: 15px;
-            border: 1px solid var(--card-border);
-            border-radius: var(--border-radius-md);
-            font-family: var(--font-main);
-            font-size: 1rem;
-            background-color: var(--card-bg);
-            color: var(--text-primary);
-        }
-        
-        .cta-form input::placeholder {
-            color: var(--text-secondary);
-        }
-        
-        .cta-form input:focus {
-            outline: none;
-            border-color: var(--color-accent);
-        }
-
-        .cta-form .btn-primary {
-            font-size: 1.1rem;
-            padding: 16px;
-        }
-
-        .form-disclaimer {
-            text-align: center;
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-            margin-top: 15px;
-        }
-        
-        .form-disclaimer a { color: var(--text-secondary); }
-
-        /* ------------------- */
-        /*   7. ФУТЕР          */
-        /* ------------------- */
-        .footer {
-            padding: 60px 0 30px;
-            background-color: #000000;
-        }
-        
-        .footer-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 40px;
-            margin-bottom: 60px;
-        }
-        
-        .footer-col h4 {
-            font-size: 1.1rem;
-            margin-bottom: 20px;
-        }
-        
-        .footer-col a, .footer-col p {
-            color: var(--text-secondary);
-            text-decoration: none;
-            display: block;
-            margin-bottom: 10px;
-            font-size: 0.95rem;
-            transition: color 0.3s ease;
-        }
-
-        .footer-col a:hover {
-            color: var(--text-primary);
-        }
-        
-        .footer-social-icons {
-            display: flex;
-            gap: 20px;
-        }
-
-        .footer-social-icons a svg {
-            width: 24px;
-            height: 24px;
-            fill: var(--text-secondary);
-            transition: fill 0.3s ease;
-        }
-
-        .footer-social-icons a:hover svg {
-            fill: var(--color-accent);
-        }
-
-        .footer-bottom {
-            border-top: 1px solid var(--card-border);
-            padding-top: 30px;
-            text-align: center;
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-        }
-        .footer-bottom a { color: var(--text-secondary); }
-
-
-        /* ------------------- */
-        /*   АДАПТИВНОСТЬ      */
-        /* ------------------- */
-        @media (min-width: 768px) {
-            h2.section-title { font-size: 3.2rem; }
-            .hero .container { grid-template-columns: 1.2fr 1fr; }
-            .hero-text h1 { font-size: 4rem; }
-            .expert-block { grid-template-columns: 1fr 1.2fr; gap: 60px; }
-            .services-grid { grid-template-columns: repeat(2, 1fr); }
-            .reviews-grid { grid-template-columns: repeat(2, 1fr); }
-        }
-
-        @media (min-width: 1024px) {
-            section { padding: 100px 0; }
-            .hero-text h1 { font-size: 4.5rem; }
-            .services-grid { grid-template-columns: repeat(3, 1fr); }
-        }
-
     </style>
 </head>
-<body>
-
-<!-- Progress bar -->
-<div class="progress-container">
-    <div class="progress-bar" id="progressBar"></div>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white selection:bg-primary/30">
+<header class="fixed top-0 left-0 right-0 z-50 glass-header border-b border-white/5">
+<div class="max-w-[1280px] mx-auto px-6 h-20 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="size-8 bg-primary rounded-lg flex items-center justify-center text-background-dark">
+<span class="material-symbols-outlined font-bold">pets</span>
 </div>
-
-<div class="site-wrapper">
-    <!-- 1. ПЕРВЫЙ ЭКРАН -->
-    <header class="hero">
-        <div class="container">
-            <div class="hero-text">
-                <div class="urgency-banner">
+<h1 class="text-xl font-bold tracking-tight">Dogtrening</h1>
+</div>
+<nav class="hidden md:flex items-center gap-10">
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#services">Услуги</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#about">Об эксперте</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#reviews">Отзывы</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#contacts">Контакты</a>
+</nav>
+<button class="bg-primary text-background-dark px-6 py-2.5 rounded-full text-sm font-bold hover:scale-105 transition-transform">
+            Записаться
+        </button>
+</div>
+</header>
+<main class="pt-20">
+<section class="max-w-[1280px] mx-auto px-6 py-16 md:py-24">
+<div class="flex flex-col lg:flex-row gap-12 items-center">
+<div class="flex-1 space-y-8">
+<div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-bold">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+</span>
                     Осталось 3 места на индивидуальные занятия в этом месяце!
                 </div>
-                <h1>Не просто дрессировка, а ключ к пониманию вашей собаки</h1>
-                <p>Научим вас говорить на одном языке с вашим питомцем. Гуманные и эффективные методики от кинолога Марии Смуровой.</p>
-                <a href="#form-section" class="btn btn-primary">Записаться на консультацию</a>
-            </div>
-            <div class="hero-image-card glass-card">
-                <img src="unnamed (1).jpg" alt="Мария Смурова, кинолог">
-            </div>
-        </div>
-    </header>
-
-    <main>
-
-        <!-- 2. БЛОК "БОЛИ" КЛИЕНТА -->
-        <section id="problems">
-            <div class="container">
-                <h2 class="section-title">Узнаете свою ситуацию?</h2>
-                <div class="problems-grid">
-                    <div class="problem-card glass-card">
-                        <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg>
-                        <h4>Прогулка — это стрессссс</h4>
-                        <p>Собака тянет поводок, рвется к другим и не слышит ваши команды.</p>
-                    </div>
-                    <div class="problem-card glass-card">
-                        <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" /></svg>
-                        <h4>Улица как шведский стол</h4>
-                        <p>Питомец подбирает всё, что находит, рискуя своим здоровьем.</p>
-                    </div>
-                    <div class="problem-card glass-card">
-                        <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8.25V18a2.25 2.25 0 0 0 2.25 2.25h13.5A2.25 2.25 0 0 0 21 18V8.25m-18 0V6a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 6v2.25m-18 0h18" /></svg>
-                        <h4>Невозможно оставить одного</h4>
-                        <p>Собака воет, лает и грызет мебель, как только вы выходите за дверь.</p>
-                    </div>
-                    <div class="problem-card glass-card">
-                        <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 1-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 1 3.09-3.09L12 5.25l2.846.813a4.5 4.5 0 0 1 3.09 3.09L21.75 12l-2.846.813a4.5 4.5 0 0 1-3.09 3.09Z" /></svg>
-                        <h4>Агрессия или страх</h4>
-                        <p>Бросается на прохожих, собак или, наоборот, боится каждого шороха.</p>
-                    </div>
-                </div>
-                <p class="problems-conclusion">Хватит это терпеть! Любое поведение можно скорректировать, если знать причину.</p>
-            </div>
-        </section>
-
-        <!-- 3. БЛОК УСЛУГ "РЕШЕНИЕ" -->
-        <section id="services">
-            <div class="container">
-                <h2 class="section-title">Подберем формат обучения, который подойдет именно вам</h2>
-                <div class="services-grid">
-                    <div class="service-card glass-card">
-                        <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" /></svg>
-                        <h3>Индивидуальные занятия</h3>
-                        <p class="description">Полное погружение в вашу проблему. Кинолог работает один на один с вами и вашей собакой, разрабатывая персональную программу коррекции.</p>
-                        <p class="who-fits"><b>Подходит:</b> для решения сложных проблем (агрессия, страхи) и для тех, кто хочет максимального внимания.</p>
-                        <a href="#form-section" class="btn btn-secondary">Узнать больше</a>
-                    </div>
-                    <div class="service-card glass-card">
-                        <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17.25v1.007a3 3 0 0 1-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0 1 15 18.257V17.25m6-12V15a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 15V5.25A2.25 2.25 0 0 1 5.25 3h13.5A2.25 2.25 0 0 1 21 5.25Z" /></svg>
-                        <h3>Онлайн-школа</h3>
-                        <p class="description">Занимайтесь из любой точки мира. Видео-уроки, персональные консультации по Zoom и поддержка в чате. Эффективность не уступает очным занятиям.</p>
-                        <p class="who-fits"><b>Подходит:</b> для жителей других городов, занятых людей и для проработки базовых команд и бытовых проблем.</p>
-                        <a href="#form-section" class="btn btn-secondary">Узнать больше</a>
-                    </div>
-                    <div class="service-card glass-card">
-                        <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m-7.286 2.72a3 3 0 0 1-4.682-2.72 9.094 9.094 0 0 1 3.741-.479m7.286 2.72-7.286-2.72m0 0a3 3 0 0 1 4.682-2.72M12 18.72v-2.72m0 0a3 3 0 0 0 4.682-2.72m-4.682 2.72a3 3 0 0 0-4.682-2.72m-4.682 2.72a9.094 9.094 0 0 1-3.741-.479m15.462 0a9.094 9.094 0 0 0-3.741-.479M12 12.72a3 3 0 0 1-3-3V9a3 3 0 0 1 6 0v.72a3 3 0 0 1-3 3Z" /></svg>
-                        <h3>Групповые занятия</h3>
-                        <p class="description">Отработка послушания в реальных условиях: рядом с другими людьми и собаками. Учим собаку концентрироваться на вас, а не на раздражителях.</p>
-                        <p class="who-fits"><b>Подходит:</b> для щенков и взрослых собак, которым нужна социализация и отработка команд в обществе.</p>
-                        <a href="#form-section" class="btn btn-secondary">Узнать больше</a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 4. БЛОК ЭКСПЕРТНОСТИ -->
-        <section id="expert">
-            <div class="container">
-                <div class="expert-block">
-                    <div class="expert-photo">
-                        <img src="6888.jpg" alt="Мария Смурова, кинолог">
-                    </div>
-                    <div class="expert-text-content">
-                        <h2 class="section-title" style="text-align: left;">Вашу собаку будет обучать профессионал</h2>
-                        <div class="expert-text">
-                            <blockquote>"Здравствуйте! Меня зовут Мария Смурова. Вот уже 15 лет я помогаю тысячам владельцев построить доверительные отношения со своими собаками. Моя методика основана на науке о поведении животных и принципах положительного подкрепления. Я не использую насилие и не "ломаю" волю собаки. Моя задача — научить ВАС понимать своего питомца, чтобы он сам хотел вас слушаться."</blockquote>
-                            <p class="expert-signature">— Мария Смурова, основатель школы Dogtrening</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 5. БЛОК ОТЗЫВОВ -->
-        <section id="reviews">
-            <div class="container">
-                <h2 class="section-title">Они уже решили свои проблемы. Получится и у вас!</h2>
-                <div class="reviews-grid">
-                    <div class="review-card glass-card">
-                        <blockquote>"Мы пришли к Марии с полным набором: тянул поводок, гонялся за голубями, дома выл. После онлайн-курса собаку как подменили! Теперь прогулки — это радость, а не каторга. Спасибо!"</blockquote>
-                        <div class="review-author">
-                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1964&auto=format&fit=crop" alt="Фото клиента">
-                            <div class="review-author-info">
-                                <strong>Екатерина и Рэй</strong>
-                                <span>Австралийская овчарка</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="review-card glass-card">
-                        <blockquote>"Боялись упустить время с воспитанием щенка. Групповые занятия для малышей — это просто находка! Наш Арчи научился всем базовым командам и теперь самый послушный парень на районе!"</blockquote>
-                        <div class="review-author">
-                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1887&auto=format&fit=crop" alt="Фото клиента">
-                            <div class="review-author-info">
-                                <strong>Семья Ивановых и Арчи</strong>
-                                <span>Вельш-корги пемброк</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="review-card glass-card">
-                        <blockquote>"Наша лабрадор Ника стала настоящим монстром после рождения щенка. Лаяла на всех, не давала подойти к малышу. Мария помогла разобраться в причинах и за 3 недели мы вернули гармонию в семью. Теперь все счастливы!"</blockquote>
-                        <div class="review-author">
-                            <img src="00088.jpg" alt="Фото клиента">
-                            <div class="review-author-info">
-                                <strong>Анна и Ника</strong>
-                                <span>Лабрадор ретривер</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 6. ФИНАЛЬНЫЙ БЛОК С ФОРМОЙ -->
-        <section id="form-section">
-            <div class="container">
-                <h2 class="section-title">Сделайте первый шаг к собаке вашей мечты уже сегодня!</h2>
-                <p class="form-subtitle">Оставьте заявку на бесплатную 15-минутную онлайн-консультацию. Мы разберем вашу ситуацию и подскажем, с чего начать.</p>
-                <form class="cta-form" action="#" method="POST">
-                    <input type="text" name="name" placeholder="Ваше имя" required>
-                    <input type="tel" name="phone" placeholder="Ваш телефон" required>
-                    <input type="text" name="dog_info" placeholder="Кличка и возраст собаки (необязательно)">
-                    <button type="submit" class="btn btn-primary">Получить бесплатную консультацию</button>
-                </form>
-                <p class="form-disclaimer">Нажимая на кнопку, вы даете согласие на <a href="#">обработку персональных данных</a>.</p>
-            </div>
-        </section>
-    </main>
-    
-    <!-- 7. ФУТЕР -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-grid">
-                <div class="footer-col">
-                    <h4>Dogtrening</h4>
-                    <p>Послушание из любви и уважения.</p>
-                </div>
-                <div class="footer-col">
-                    <h4>Услуги</h4>
-                    <a href="#services">Индивидуальные занятия</a>
-                    <a href="#services">Онлайн-школа</a>
-                    <a href="#services">Групповые курсы</a>
-                </div>
-                <div class="footer-col">
-                    <h4>Контакты</h4>
-                    <a href="tel:+79991234567">+7 (999) 123-45-67</a>
-                    <a href="mailto:info@dogtrening.com">info@dogtrening.com</a>
-                </div>
-                <div class="footer-col">
-                    <h4>Соцсети</h4>
-                     <div class="footer-social-icons">
-                        <a href="#" aria-label="VKontakte">
-                            <svg viewBox="0 0 24 24"><path d="M13.162 18.994c.607-.08 1.124-.432 1.551-1.053.493-.72 1.185-2.205 1.185-2.205s.273-.615.658-.937c.385-.323.77-.568 1.156-.735.42-.183.84-.288 1.258-.315.526-.034.938.018 1.056.15.118.132.162.345.102.637-.06.292-.333.913-.814 1.777-.482.864-1.036 1.74-1.66 2.628-.658 1.053-1.226 1.836-1.705 2.35-.552.597-1.157.925-1.815 1.003-1.012.122-2.12-.22-3.322-1.026-1.503-.96-2.82-2.507-3.95-4.64C5.08 15.02 4.09 13.068 3.52 11.233c-.78-2.525-.8-4.618.23-5.323.864-.59 2.022.155 2.82.936.56.542 1.012 1.34 1.357 2.39.345 1.052.482 1.812.41 2.28-.073.468-.133.744-.393 1.08-.258.337-.597.568-.734.568-.138 0-.276-.08-.415-.24-.138-.16-.21-.395-.21-.705 0-.642.182-1.836.548-2.922.366-1.086.84-2.127 1.425-3.123.585-.996 1.278-1.785 2.08-2.366.802-.58 1.638-.872 2.508-.872.481 0 .91.104 1.29.311.38.208.57.495.57.864 0 .22-.05.476-.15.77-.098.293-.25.68-.455 1.16-.207.48-.413.987-.62 1.518-.205.53-.393 1.06-.563 1.587-.17.528-.255.98-.255 1.357 0 .376.082.68.248.91.164.23.415.347.752.347.32 0 .68-.155.978-.465.297-.31.527-.64.69-.99.08-.18.15-.38.21-.59.39-1.25.99-2.28 1.79-3.09.28-.29.58-.52.89-.69.31-.17.59-.25.83-.25.32 0 .58.09.78.28.2.19.3.42.3.69 0 .33-.16.73-.48 1.2-.32.47-.79.99-1.4 1.57-.61.58-1.13 1.15-1.56 1.71-.43.56-.65 1.06-.65 1.5 0 .21.06.42.18.63.12.21.3.38.54.5.24.12.5.18.78.18.43 0 .86-.14 1.28-.43.42-.29.75-.63.99-1.02.53-.87.8-1.81.8-2.83 0-1.22-.32-2.33-.95-3.32-.63-.99-1.5-1.74-2.6-2.25-1.1-.51-2.3-.77-3.6-.77-1.5 0-2.8.39-3.9 1.17-1.1.78-2 1.85-2.7 3.22-.7 1.37-1.1 2.98-1.1 4.84 0 1.5.23 2.94.7 4.32.47 1.38 1.12 2.62 1.95 3.72.83 1.1 1.74 1.95 2.73 2.55.99.6 2.03.9 3.12.9.1 0 .2-.01.3-.02z"/></svg>
-                        </a>
-                        <a href="#" aria-label="Telegram">
-                            <svg viewBox="0 0 24 24"><path d="M22 3.43a.62.62 0 0 0-.8-.47L3.33 8.65a.61.61 0 0 0 .08 1.14l4.42 1.37 1.38 4.41a.62.62 0 0 0 1.14.08l5.69-18.87a.62.62 0 0 0-.44-.73zM5.44 9.6l12.4-5.32-9.5 9.49-1.52-4.86zM10.1 18.56l-1.37-4.42 9.5-9.49-3.32 12.4z"/></svg>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2024 Dogtrening. Все права защищены. Сайт создан в Gemini.</p>
-            </div>
-        </div>
-    </footer>
+<h2 class="text-5xl md:text-6xl font-extrabold leading-[1.1] tracking-tight">
+                    Не просто дрессировка, <br/>
+<span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent-blue">а ключ к пониманию вашей собаки</span>
+</h2>
+<p class="text-lg md:text-xl text-slate-400 max-w-lg leading-relaxed">
+                    Научим вас говорить на одном языке с вашим питомцем. Гуманные и эффективные методики от кинолога Марии Смуровой.
+                </p>
+<div class="flex flex-col sm:flex-row gap-4">
+<button class="bg-primary text-background-dark px-8 py-4 rounded-full text-lg font-bold hover:shadow-[0_0_20px_rgba(13,242,89,0.3)] transition-all">
+                        Записаться на консультацию
+                    </button>
+<button class="border border-white/20 hover:bg-white/5 px-8 py-4 rounded-full text-lg font-bold transition-all">
+                        Наша методика
+                    </button>
 </div>
+</div>
+<div class="flex-1 w-full relative">
+<div class="aspect-[4/5] rounded-xl overflow-hidden shadow-2xl relative group">
+<div class="absolute inset-0 bg-gradient-to-t from-background-dark/60 to-transparent"></div>
+<div class="w-full h-full bg-center bg-cover transition-transform duration-700 group-hover:scale-105" style='background-image: url("6888.jpg");'>
+</div>
+</div>
+<div class="absolute -bottom-6 -left-6 glass-card p-6 rounded-lg hidden md:block">
+<div class="flex items-center gap-4">
+<div class="flex -space-x-3">
+<div class="w-10 h-10 rounded-full border-2 border-background-dark bg-slate-500"></div>
+<div class="w-10 h-10 rounded-full border-2 border-background-dark bg-slate-600"></div>
+<div class="w-10 h-10 rounded-full border-2 border-background-dark bg-slate-700"></div>
+</div>
+<div>
+<p class="text-sm font-bold">500+ собак</p>
+<p class="text-xs text-slate-400">Успешно обучено</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="border-y border-white/5 py-12 bg-white/[0.02]">
+<div class="max-w-[1280px] mx-auto px-6">
+<p class="text-center text-sm font-semibold text-slate-500 uppercase tracking-widest mb-10">Наши сертификаты и признание</p>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-8 opacity-40 grayscale hover:grayscale-0 transition-all text-center">
+<div class="flex items-center justify-center gap-3">
+<span class="material-symbols-outlined text-4xl">verified_user</span>
+<span class="font-bold">KENNEL CLUB</span>
+</div>
+<div class="flex items-center justify-center gap-3">
+<span class="material-symbols-outlined text-4xl">workspace_premium</span>
+<span class="font-bold">IAABC</span>
+</div>
+<div class="flex items-center justify-center gap-3">
+<span class="material-symbols-outlined text-4xl">military_tech</span>
+<span class="font-bold">APDT MEMBER</span>
+</div>
+<div class="flex items-center justify-center gap-3">
+<span class="material-symbols-outlined text-4xl">award_star</span>
+<span class="font-bold">DOGS TRUST</span>
+</div>
+</div>
+</div>
+</section>
+<section class="max-w-[1280px] mx-auto px-6 py-24" id="services">
+<div class="text-center mb-16 space-y-4">
+<h2 class="text-4xl font-bold tracking-tight">Подберем формат обучения, который подойдет именно вам</h2>
+<p class="text-slate-400 max-w-2xl mx-auto">Выберите путь, который лучше всего соответствует вашему образу жизни и потребностям вашей собаки.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<div class="glass-card p-8 rounded-xl flex flex-col h-full hover:border-primary/50 transition-all group">
+<div class="mb-8 size-14 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-background-dark transition-all">
+<span class="material-symbols-outlined text-3xl">person_pin_circle</span>
+</div>
+<h3 class="text-2xl font-bold mb-4">Индивидуальные занятия</h3>
+<p class="text-slate-400 mb-8 flex-grow">Персонализированные сессии у вас дома или на нашей площадке. Идеально для решения специфических поведенческих проблем.</p>
+<div class="space-y-4">
+<div class="inline-block px-3 py-1 rounded-full bg-white/5 text-xs font-semibold text-slate-300">Подходит: реактивным собакам и щенкам</div>
+<button class="w-full py-4 rounded-full border border-white/10 font-bold hover:bg-white text-background-dark hover:text-background-dark bg-white/10 transition-all">Подробнее</button>
+</div>
+</div>
+<div class="glass-card p-8 rounded-xl flex flex-col h-full border-primary/20 scale-105 shadow-2xl relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4">
+<span class="text-[10px] font-black tracking-widest uppercase bg-primary text-background-dark px-3 py-1 rounded-full">Популярно</span>
+</div>
+<div class="mb-8 size-14 rounded-full bg-primary flex items-center justify-center text-background-dark">
+<span class="material-symbols-outlined text-3xl">laptop_mac</span>
+</div>
+<h3 class="text-2xl font-bold mb-4">Онлайн-школа</h3>
+<p class="text-slate-400 mb-8 flex-grow">Интерактивные видеокурсы и еженедельный коучинг. Доступ к премиальным материалам из любой точки мира.</p>
+<div class="space-y-4">
+<div class="inline-block px-3 py-1 rounded-full bg-primary/10 text-xs font-semibold text-primary">Подходит: занятым владельцам</div>
+<button class="w-full py-4 rounded-full bg-primary font-bold text-background-dark hover:shadow-[0_0_20px_rgba(13,242,89,0.4)] transition-all">Записаться</button>
+</div>
+</div>
+<div class="glass-card p-8 rounded-xl flex flex-col h-full hover:border-primary/50 transition-all group">
+<div class="mb-8 size-14 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-background-dark transition-all">
+<span class="material-symbols-outlined text-3xl">groups</span>
+</div>
+<h3 class="text-2xl font-bold mb-4">Групповые занятия</h3>
+<p class="text-slate-400 mb-8 flex-grow">Акцент на социализации и работе при раздражителях. Учитесь вместе с другими владельцами в контролируемой среде.</p>
+<div class="space-y-4">
+<div class="inline-block px-3 py-1 rounded-full bg-white/5 text-xs font-semibold text-slate-300">Подходит: социализация</div>
+<button class="w-full py-4 rounded-full border border-white/10 font-bold hover:bg-white text-background-dark hover:text-background-dark bg-white/10 transition-all">Подробнее</button>
+</div>
+</div>
+</div>
+</section>
+<section class="bg-white/[0.01] py-24 overflow-hidden" id="about">
+<div class="max-w-[1280px] mx-auto px-6">
+<div class="flex flex-col lg:flex-row items-center gap-16">
+<div class="flex-1 relative">
+<div class="absolute -inset-4 bg-primary/20 rounded-xl blur-3xl opacity-20"></div>
+<div class="aspect-square max-w-md mx-auto rounded-xl overflow-hidden border border-white/10 relative z-10">
+<div class="w-full h-full bg-center bg-cover" style='background-image: url("00088.jpg");'>
+</div>
+</div>
+</div>
+<div class="flex-1 space-y-8">
+<div class="space-y-2">
+<span class="text-primary font-bold text-sm tracking-widest uppercase">Вашу собаку будет обучать профессионал</span>
+<h2 class="text-4xl font-bold">Мария Смурова</h2>
+</div>
+<div class="relative">
+<span class="material-symbols-outlined text-8xl text-primary/10 absolute -top-10 -left-6">format_quote</span>
+<blockquote class="text-2xl md:text-3xl font-light italic text-slate-200 leading-snug relative z-10">
+                            Здравствуйте! Меня зовут Мария Смурова. Вот уже 15 лет я помогаю тысячам владельцев построить доверительные отношения со своими собаками. Моя методика основана на науке о поведении животных и принципах положительного подкрепления. Я не использую насилие и не "ломаю" волю собаки. Моя задача — научить ВАС понимать своего питомца, чтобы он сам хотел вас слушаться.
+                        </blockquote>
+</div>
+<p class="text-slate-400 leading-relaxed text-lg">
+                        Мария — дипломированный специалист по поведению животных. Её методология сочетает современную этологию с глубокой эмпатией, помогая наладить контакт даже в самых сложных случаях.
+                    </p>
+<div class="grid grid-cols-2 gap-8 pt-4">
+<div>
+<h4 class="text-3xl font-bold text-primary">15+</h4>
+<p class="text-sm text-slate-500 font-medium">Лет опыта</p>
+</div>
+<div>
+<h4 class="text-3xl font-bold text-primary">1200+</h4>
+<p class="text-sm text-slate-500 font-medium">Счастливых семей</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="max-w-[1280px] mx-auto px-6 py-24">
+<div class="max-w-3xl mb-16">
+<h2 class="text-4xl font-bold mb-6">Узнаете свою ситуацию?</h2>
+<p class="text-slate-400 text-lg">Мы решаем основные проблемы, которые делают жизнь с собакой стрессовой, заменяя разочарование спокойной уверенностью.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+<div class="p-8 rounded-xl border border-white/5 bg-white/[0.02] hover:bg-white/[0.04] transition-all">
+<span class="material-symbols-outlined text-4xl text-accent-blue mb-6">link_off</span>
+<h4 class="text-xl font-bold mb-3">Прогулка — это стрессссс</h4>
+<p class="text-sm text-slate-500">Превратим хаотичное натяжение поводка в спокойную прогулку, где собака ориентирована на вас.</p>
+</div>
+<div class="p-8 rounded-xl border border-white/5 bg-white/[0.02] hover:bg-white/[0.04] transition-all">
+<span class="material-symbols-outlined text-4xl text-accent-blue mb-6">campaign</span>
+<h4 class="text-xl font-bold mb-3">Агрессия или страх</h4>
+<p class="text-sm text-slate-500">Поможем собаке чувствовать себя в безопасности и научим её правильно реагировать на раздражители.</p>
+</div>
+<div class="p-8 rounded-xl border border-white/5 bg-white/[0.02] hover:bg-white/[0.04] transition-all">
+<span class="material-symbols-outlined text-4xl text-accent-blue mb-6">cleaning_services</span>
+<h4 class="text-xl font-bold mb-3">Улица как шведский стол</h4>
+<p class="text-sm text-slate-500">Защитите здоровье собаки, отработав надежную команду отказа от подбора еды с земли.</p>
+</div>
+<div class="p-8 rounded-xl border border-white/5 bg-white/[0.02] hover:bg-white/[0.04] transition-all">
+<span class="material-symbols-outlined text-4xl text-accent-blue mb-6">mood_bad</span>
+<h4 class="text-xl font-bold mb-3">Невозможно оставить одного</h4>
+<p class="text-sm text-slate-500">Мягкие протоколы десенсибилизации, которые помогут собаке спокойно ждать вашего возвращения.</p>
+</div>
+</div>
+</section>
+<section class="bg-white/[0.01] py-24" id="reviews">
+<div class="max-w-[1280px] mx-auto px-6">
+<div class="flex justify-between items-end mb-16">
+<div>
+<h2 class="text-4xl font-bold mb-2">Они уже решили свои проблемы. Получится и у вас!</h2>
+<div class="flex items-center gap-2 text-primary">
+<span class="material-symbols-outlined fill-1">star</span>
+<span class="material-symbols-outlined fill-1">star</span>
+<span class="material-symbols-outlined fill-1">star</span>
+<span class="material-symbols-outlined fill-1">star</span>
+<span class="material-symbols-outlined fill-1">star</span>
+<span class="ml-2 font-bold text-white">Средняя оценка 4.9/5</span>
+</div>
+</div>
+<div class="flex gap-4">
+<button class="size-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-white/5 transition-all">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<button class="size-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-white/5 transition-all">
+<span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+<div class="glass-card p-8 rounded-xl space-y-6">
+<p class="text-slate-300 italic">"Мы пришли к Марии с полным набором: тянул поводок, гонялся за голубями, дома выл. После онлайн-курса собаку как подменили! Теперь прогулки — это радость, а не каторга. Спасибо!"</p>
+<div class="flex items-center gap-4">
+<div class="size-12 rounded-full bg-slate-700"></div>
+<div>
+<p class="font-bold">Екатерина и Рэй</p>
+<p class="text-xs text-slate-500">Австралийская овчарка</p>
+</div>
+</div>
+</div>
+<div class="glass-card p-8 rounded-xl space-y-6">
+<p class="text-slate-300 italic">"Боялись упустить время с воспитанием щенка. Групповые занятия для малышей — это просто находка! Наш Арчи научился всем базовым командам и теперь самый послушный парень на районе!"</p>
+<div class="flex items-center gap-4">
+<div class="size-12 rounded-full bg-slate-600"></div>
+<div>
+<p class="font-bold">Семья Ивановых и Арчи</p>
+<p class="text-xs text-slate-500">Вельш-корги пемброк</p>
+</div>
+</div>
+</div>
+<div class="glass-card p-8 rounded-xl space-y-6">
+<p class="text-slate-300 italic">"Наша лабрадор Ника стала настоящим монстром после рождения щенка. Лаяла на всех, не давала подойти к малышу. Мария помогла разобраться в причинах и за 3 недели мы вернули гармонию в семью. Теперь все счастливы!"</p>
+<div class="flex items-center gap-4">
+<div class="size-12 rounded-full bg-slate-500"></div>
+<div>
+<p class="font-bold">Анна и Ника</p>
+<p class="text-xs text-slate-500">Лабрадор ретривер</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="max-w-[1280px] mx-auto px-6 py-24" id="contacts">
+<div class="rounded-xl overflow-hidden relative p-12 md:p-24 bg-gradient-to-br from-[#1a1c1b] to-background-dark border border-white/5">
+<div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 40px 40px;"></div>
+<div class="relative z-10 max-w-2xl mx-auto text-center space-y-12">
+<div class="space-y-4">
+<h2 class="text-4xl md:text-5xl font-black">Сделайте первый шаг к собаке вашей мечты уже сегодня!</h2>
+<p class="text-slate-400 text-lg">Оставьте свои контакты, и мы перезвоним вам для бесплатной 15-минутной консультации.</p>
+</div>
+<form class="space-y-4">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<input class="bg-white/5 border-white/10 rounded-full px-6 py-4 focus:ring-primary focus:border-primary text-white w-full" placeholder="Ваше имя" type="text"/>
+<input class="bg-white/5 border-white/10 rounded-full px-6 py-4 focus:ring-primary focus:border-primary text-white w-full" placeholder="Ваш Email или Телефон" type="text"/>
+</div>
+<button class="w-full bg-primary text-background-dark py-5 rounded-full text-lg font-black hover:shadow-[0_0_30px_rgba(13,242,89,0.4)] transition-all uppercase tracking-widest" type="submit">
+                        Получить бесплатную консультацию
+                    </button>
+</form>
+<p class="text-xs text-slate-500">Это вас ни к чему не обязывает. Мы гарантируем конфиденциальность данных.</p>
+</div>
+</div>
+</section>
+</main>
+<footer class="border-t border-white/5 py-12 bg-background-dark">
+<div class="max-w-[1280px] mx-auto px-6">
+<div class="flex flex-col md:flex-row justify-between items-center gap-8">
+<div class="flex items-center gap-2">
+<div class="size-6 bg-primary rounded-md flex items-center justify-center text-background-dark">
+<span class="material-symbols-outlined text-sm font-bold">pets</span>
+</div>
+<span class="text-lg font-bold">Dogtrening</span>
+</div>
+<div class="flex gap-8">
+<a class="text-slate-500 hover:text-white transition-colors" href="#"><span class="material-symbols-outlined">social_leaderboard</span></a>
+<a class="text-slate-500 hover:text-white transition-colors" href="#"><span class="material-symbols-outlined">photo_camera</span></a>
+<a class="text-slate-500 hover:text-white transition-colors" href="#"><span class="material-symbols-outlined">play_circle</span></a>
+</div>
+<p class="text-slate-500 text-sm">© 2024 Dogtrening. Все права защищены.</p>
+</div>
+</div>
+</footer>
 
-<script>
-// Progress bar functionality
-window.addEventListener('scroll', function() {
-    const scrollTop = window.pageYOffset;
-    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-    const scrollPercent = (scrollTop / docHeight) * 100;
-    document.getElementById('progressBar').style.width = scrollPercent + '%';
-});
-
-// Animate on scroll functionality
-function animateOnScroll() {
-    const elements = document.querySelectorAll('.animate-on-scroll, .animate-left, .animate-right');
-
-    elements.forEach(element => {
-        const elementTop = element.getBoundingClientRect().top;
-        const elementBottom = element.getBoundingClientRect().bottom;
-        const windowHeight = window.innerHeight;
-
-        if (elementTop < windowHeight * 0.85 && elementBottom > 0) {
-            element.classList.add('animate');
-        }
-    });
-}
-
-// Add animation classes to elements
-document.addEventListener('DOMContentLoaded', function() {
-    // Add animation classes to sections
-    const sections = document.querySelectorAll('section');
-    sections.forEach(section => {
-        section.classList.add('animate-on-scroll');
-    });
-
-    // Add animation classes to specific elements
-    const heroText = document.querySelector('.hero-text');
-    const heroImage = document.querySelector('.hero-image-card');
-    const expertPhoto = document.querySelector('.expert-photo');
-    const expertText = document.querySelector('.expert-text-content');
-
-    if (heroText) heroText.classList.add('animate-left');
-    if (heroImage) heroImage.classList.add('animate-right');
-    if (expertPhoto) expertPhoto.classList.add('animate-left');
-    if (expertText) expertText.classList.add('animate-right');
-
-    // Add button animations
-    const buttons = document.querySelectorAll('.btn');
-    buttons.forEach(btn => {
-        btn.classList.add('btn-bounce');
-    });
-
-    // Initial check for animations
-    animateOnScroll();
-});
-
-// Listen for scroll events
-window.addEventListener('scroll', animateOnScroll);
-
-// Smooth scroll for anchor links
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-            target.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
-        }
-    });
-});
-</script>
-
-</body>
-</html>
+</body></html>        
